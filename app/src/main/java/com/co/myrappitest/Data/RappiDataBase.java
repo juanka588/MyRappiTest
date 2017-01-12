@@ -16,9 +16,19 @@ public class RappiDataBase extends SQLiteOpenHelper {
     private static final String DB_NAME = "rappiDB";
     private static final int DB_VERSION = 1;
 
-    private static final String CREATE_TABLE = "CREATE TABLE "+ DataT5Content.TABLE_NAME
-            +" (" +
-            ");";
+    private static String CREATE_TABLE;
+
+    static {
+        StringBuilder query = new StringBuilder("CREATE TABLE " + DataT5Content.TABLE_NAME
+                + " ( _ID INT, ");
+        for (int i = 0; i < DataT5Content.COLUMNS.length - 1; i++) {
+            query.append(DataT5Content.COLUMNS[i]);
+            query.append(" VARCHAR, ");
+        }
+        query.append(DataT5Content.COLUMNS[DataT5Content.COLUMNS.length - 1]);
+        query.append(" VARCHAR );");
+        CREATE_TABLE = query.toString();
+    }
 
     public RappiDataBase(Context context) {
         super(context, DB_NAME, null, DB_VERSION);

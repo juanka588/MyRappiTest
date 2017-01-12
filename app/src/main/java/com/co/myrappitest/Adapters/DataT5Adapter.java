@@ -17,9 +17,12 @@ import java.util.List;
 public class DataT5Adapter extends RecyclerView.Adapter<DataT5Adapter.T5ViewHolder> {
     private List<DataT5> dataList;
 
+    public DataT5Adapter(List<DataT5> dataList) {
+        this.dataList = dataList;
+    }
+
     @Override
     public T5ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.categories_layout, parent, false);
         T5ViewHolder pvh = new T5ViewHolder(v);
         return pvh;

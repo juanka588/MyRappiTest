@@ -2,7 +2,6 @@ package com.co.myrappitest.GUI;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -10,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.co.myrappitest.DataContent.DataT5Content;
 import com.co.myrappitest.R;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
@@ -20,11 +20,11 @@ import com.squareup.okhttp.Response;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.text.ParseException;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String JSONURL = "https://www.reddit.com/reddits.json";
+    private static final String TAG = MainActivity.class.getSimpleName();
     private final OkHttpClient client = new OkHttpClient();
 
     @Override
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              parseJSON();
+                parseJSON();
             }
         });
     }
@@ -58,12 +58,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Response response) throws IOException {
                 if (!response.isSuccessful()) {
-
+                    //no internet connection
                 } else {
-                    String cad = response.body().string();
-
-                        Log.d("JSON content",cad);
-
+                    try {
+                        DataT5Content.updateDataBase(response.body().string(), getApplicationContext());
+                    } catch (JSONException e) {
+                        Log.e(TAG, e.toString());
+                    }
                 }
             }
         });
