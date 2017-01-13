@@ -14,7 +14,7 @@
         tools:layout="@layout/fragment_main" />
 
     <FrameLayout
-        android:id="@+id/container"
+        android:id="@+id/container_two_panes"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="7"

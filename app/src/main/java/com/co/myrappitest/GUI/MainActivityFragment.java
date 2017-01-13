@@ -47,7 +47,7 @@ public class MainActivityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         RecyclerView list = (RecyclerView) view.findViewById(R.id.list_view);
         int span = 1;
-        if (container.findViewById(R.id.container_details) != null) {
+        if (container.findViewById(R.id.container_two_panes) != null) {
             span = 2;
         }
         list.setLayoutManager(new GridLayoutManager(getContext(), span));

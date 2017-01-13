@@ -34,12 +34,12 @@ public class MainActivity extends AppCompatActivity implements OnCategorySelecte
     public void onCategorySelect(DataT5 object) {
         Bundle b = new Bundle();
         b.putParcelable(CATEGORY, object);
-        if (findViewById(R.id.container) != null) {
+        if (findViewById(R.id.container_two_panes) != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             Fragment fragment = new AppDetailsActivityFragment();
             fragment.setArguments(b);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(R.id.container, fragment);
+            fragmentTransaction.add(R.id.container_two_panes, fragment);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         } else {
