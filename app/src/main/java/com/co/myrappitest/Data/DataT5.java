@@ -64,7 +64,7 @@ public class DataT5 implements Parcelable {
 
     public String getColor() {
         if (color.isEmpty()) {
-            return "#5C5254";//gray color
+            return "#00B290";//color accent
         }
         return color;
     }

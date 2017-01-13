@@ -1,81 +1,59 @@
 package com.co.myrappitest.GUI;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 
 import com.co.myrappitest.Data.DataT5;
-import com.co.myrappitest.DataContent.DataT5Content;
 import com.co.myrappitest.Interfaces.OnCategorySelected;
 import com.co.myrappitest.R;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
-import org.json.JSONException;
-
-import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements OnCategorySelected {
 
-    private static final String JSONURL = "https://www.reddit.com/reddits.json";
-    private static final String TAG = MainActivity.class.getSimpleName();
-    public static final String CATEGOTY = "categoty";
-    private final OkHttpClient client = new OkHttpClient();
+    public static final String CATEGORY = "category";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment, new MainActivityFragment());
+        fragmentTransaction.commit();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                parseJSON();
-            }
-        });
-    }
-
-    public void parseJSON() {
-        String url = JSONURL;
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-        Call call = client.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    //no internet connection
-                } else {
-                    try {
-                        DataT5Content.updateDataBase(response.body().string(), getApplicationContext());
-                    } catch (JSONException e) {
-                        Log.e(TAG, e.toString());
-                    }
-                }
-            }
-        });
-
     }
 
     @Override
     public void onCategorySelect(DataT5 object) {
-        Intent intent = new Intent(this, AppDetailsActivity.class);
-        intent.putExtra(CATEGOTY, object);
-        startActivity(intent);
+        Bundle b = new Bundle();
+        b.putParcelable(CATEGORY, object);
+        if (findViewById(R.id.container) != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            Fragment fragment = new AppDetailsActivityFragment();
+            fragment.setArguments(b);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(R.id.container, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        } else {
+            Intent intent = new Intent(this, AppDetailsActivity.class);
+            intent.putExtras(b);
+            Pair<View, String> p1 = Pair.create(findViewById(R.id.banner_image), "image_change");
+            Pair<View, String> p2 = Pair.create(findViewById(R.id.banner_image), "title_change");
+            ActivityOptionsCompat options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation(this, p1, p2);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                startActivity(intent, options.toBundle());
+            } else {
+                startActivity(intent);
+            }
+        }
     }
 }

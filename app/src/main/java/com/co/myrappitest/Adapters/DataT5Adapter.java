@@ -7,6 +7,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +26,7 @@ import java.util.List;
 public class DataT5Adapter extends RecyclerView.Adapter<DataT5Adapter.T5ViewHolder> {
     private List<DataT5> dataList;
     private OnCategorySelected mCallback;
+    private int lastPosition = -1;
 
     public DataT5Adapter(List<DataT5> dataList, OnCategorySelected mCallback) {
         this.dataList = dataList;
@@ -42,7 +45,24 @@ public class DataT5Adapter extends RecyclerView.Adapter<DataT5Adapter.T5ViewHold
         DataT5 dataT5 = dataList.get(position);
         holder.title.setText(dataT5.getTitle());
         holder.title.setBackgroundColor(Color.parseColor(dataT5.getColor()));
-        Picasso.with(holder.context).load(dataT5.getHeaderImg()).into(holder.imageView);
+        Picasso.with(holder.context).load(dataT5.getHeaderImg()).error(R.mipmap.ic_launcher).into(holder.imageView);
+        setAnimation(holder.itemView, position);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(T5ViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        holder.clearAnimation();
+
+    }
+
+    private void setAnimation(View viewToAnimate, int position) {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(viewToAnimate.getContext(), android.R.anim.slide_in_left);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
     @Override
@@ -72,6 +92,10 @@ public class DataT5Adapter extends RecyclerView.Adapter<DataT5Adapter.T5ViewHold
                     selectItem(getAdapterPosition());
                 }
             });
+        }
+
+        public void clearAnimation() {
+            itemView.clearAnimation();
         }
     }
 

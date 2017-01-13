@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">MyRappiTest</string>
-    <string name="action_settings">Settings</string>
     <string name="title_activity_app_details">AppDetailsActivity</string>
+    <string name="connection_message">No estas conectado en estos momentos</string>
 </resources>

@@ -11,10 +11,22 @@
     tools:context="com.co.myrappitest.GUI.MainActivityFragment"
     tools:showIn="@layout/activity_main">
 
+    <TextView
+        android:id="@+id/connection_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:background="@color/colorAccent"
+        android:drawableLeft="@android:drawable/ic_menu_info_details"
+        android:gravity="center"
+        android:text="@string/connection_message"
+        android:textColor="@android:color/white" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/connection_message"
+        android:layout_marginTop="16dp" />
 
 </RelativeLayout>
