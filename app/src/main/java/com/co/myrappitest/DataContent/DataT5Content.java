@@ -50,9 +50,15 @@ public class DataT5Content implements BaseColumns {
     public static final String JSON_CONTENT_KEY_COLOR = "key_color";
     public static final String JSON_CONTENT_BANNER_SIZE = "banner_size";
     public static final String[] COLUMNS = new String[]{
-            JSON_STRUCTURE_ID, JSON_STRUCTURE_BANNER_IMG, JSON_CONTENT_BANNER_SIZE,
-            JSON_STRUCTURE_DISPLAY_NAME, JSON_STRUCTURE_HEADER_IMG, JSON_CONTENT_HEADER_SIZE,
-            JSON_STRUCTURE_DESCRIPTION_HTML, JSON_CONTENT_TITLE, JSON_CONTENT_KEY_COLOR,
+            JSON_STRUCTURE_DISPLAY_NAME,
+            JSON_CONTENT_DESCRIPTION,
+            JSON_STRUCTURE_DESCRIPTION_HTML,
+            JSON_STRUCTURE_HEADER_IMG,
+            JSON_CONTENT_KEY_COLOR,
+            JSON_STRUCTURE_BANNER_IMG,
+            JSON_CONTENT_BANNER_SIZE,
+            JSON_CONTENT_TITLE,
+            JSON_CONTENT_HEADER_SIZE,
     };
     private static final String TAG = DataT5Content.class.getSimpleName();
 
@@ -67,6 +73,7 @@ public class DataT5Content implements BaseColumns {
         }
         RappiDataBase dataBase = new RappiDataBase(context);
         SQLiteDatabase db = dataBase.getWritableDatabase();
+        db.delete(TABLE_NAME, null, null);
         int count = insertAll(db, values);
         Log.d(TAG, "rows inserted " + count);
     }
@@ -101,8 +108,19 @@ public class DataT5Content implements BaseColumns {
         RappiDataBase dataBase = new RappiDataBase(context);
         SQLiteDatabase db = dataBase.getReadableDatabase();
         Cursor cursor = db.query(TABLE_NAME, COLUMNS, null, null, null, null, null);
+        if (!cursor.moveToFirst()) {
+            Log.e(TAG, "error getting data");
+            return result;
+        }
         for (int i = 0; i < cursor.getCount(); i++) {
-            result.add(new DataT5());
+            String title = cursor.getString(cursor.getColumnIndex(JSON_CONTENT_TITLE));
+            String description = cursor.getString(cursor.getColumnIndex(JSON_CONTENT_DESCRIPTION));
+            String htmlDescr = cursor.getString(cursor.getColumnIndex(JSON_STRUCTURE_DESCRIPTION_HTML));
+            String headerImg = cursor.getString(cursor.getColumnIndex(JSON_STRUCTURE_HEADER_IMG));
+            String color = cursor.getString(cursor.getColumnIndex(JSON_CONTENT_KEY_COLOR));
+            String bannerImg = cursor.getString(cursor.getColumnIndex(JSON_STRUCTURE_BANNER_IMG));
+            result.add(new DataT5(title, description, htmlDescr, headerImg, color, bannerImg));
+            cursor.moveToNext();
         }
         return result;
     }

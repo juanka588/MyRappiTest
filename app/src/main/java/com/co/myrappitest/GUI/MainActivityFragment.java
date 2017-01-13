@@ -1,5 +1,6 @@
 package com.co.myrappitest.GUI;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,12 +11,15 @@ import android.view.ViewGroup;
 
 import com.co.myrappitest.Adapters.DataT5Adapter;
 import com.co.myrappitest.DataContent.DataT5Content;
+import com.co.myrappitest.Interfaces.OnCategorySelected;
 import com.co.myrappitest.R;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment {
+
+    private OnCategorySelected mCallback;
 
     public MainActivityFragment() {
     }
@@ -26,7 +30,13 @@ public class MainActivityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         RecyclerView list = (RecyclerView) view.findViewById(R.id.list_view);
         list.setLayoutManager(new LinearLayoutManager(getContext()));
-        list.setAdapter(new DataT5Adapter(DataT5Content.getAllData(view.getContext())));
+        list.setAdapter(new DataT5Adapter(DataT5Content.getAllData(view.getContext()), mCallback));
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallback = (OnCategorySelected) getActivity();
     }
 }
