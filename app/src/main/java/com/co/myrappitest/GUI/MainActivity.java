@@ -18,6 +18,7 @@ import com.co.myrappitest.R;
 public class MainActivity extends AppCompatActivity implements OnCategorySelected {
 
     public static final String CATEGORY = "category";
+    public static final String COLUMNS = "columns";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +46,11 @@ public class MainActivity extends AppCompatActivity implements OnCategorySelecte
         } else {
             Intent intent = new Intent(this, AppDetailsActivity.class);
             intent.putExtras(b);
-            Pair<View, String> p1 = Pair.create(findViewById(R.id.banner_image), "image_change");
-            Pair<View, String> p2 = Pair.create(findViewById(R.id.banner_image), "title_change");
-            ActivityOptionsCompat options = ActivityOptionsCompat.
-                    makeSceneTransitionAnimation(this, p1, p2);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                Pair<View, String> p1 = Pair.create(findViewById(R.id.banner_image), "image_change");
+                Pair<View, String> p2 = Pair.create(findViewById(R.id.banner_image), "title_change");
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation(this, p1, p2);
                 startActivity(intent, options.toBundle());
             } else {
                 startActivity(intent);

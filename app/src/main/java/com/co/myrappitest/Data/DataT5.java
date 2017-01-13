@@ -25,7 +25,7 @@ public class DataT5 implements Parcelable {
         this.bannerImg = bannerImg;
     }
 
-    protected DataT5(Parcel in) {
+    private DataT5(Parcel in) {
         title = in.readString();
         description = in.readString();
         htmlDescription = in.readString();

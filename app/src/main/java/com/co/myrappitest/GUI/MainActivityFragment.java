@@ -37,6 +37,8 @@ public class MainActivityFragment extends Fragment {
 
     private final OkHttpClient client = new OkHttpClient();
     private static final String JSON_URL = "https://www.reddit.com/reddits.json";
+    private RecyclerView list;
+    private boolean twoPanes;
 
     public MainActivityFragment() {
     }
@@ -45,9 +47,9 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        RecyclerView list = (RecyclerView) view.findViewById(R.id.list_view);
+        list = (RecyclerView) view.findViewById(R.id.list_view);
         int span = 1;
-        if (container.findViewById(R.id.container_two_panes) != null) {
+        if (twoPanes) {
             span = 2;
         }
         list.setLayoutManager(new GridLayoutManager(getContext(), span));
@@ -68,9 +70,10 @@ public class MainActivityFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mCallback = (OnCategorySelected) getActivity();
+        twoPanes = getActivity().findViewById(R.id.container_two_panes) != null;
     }
 
-    public void parseJSON() {
+    private void parseJSON() {
         String url = JSON_URL;
         Request request = new Request.Builder()
                 .url(url)
@@ -90,6 +93,12 @@ public class MainActivityFragment extends Fragment {
                 } else {
                     try {
                         DataT5Content.updateDataBase(response.body().string(), getContext());
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                list.getAdapter().notifyDataSetChanged();
+                            }
+                        });
                     } catch (JSONException e) {
                         Log.e(TAG, e.toString());
                     }

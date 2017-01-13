@@ -122,6 +122,7 @@ public class DataT5Content implements BaseColumns {
             result.add(new DataT5(title, description, htmlDescr, headerImg, color, bannerImg));
             cursor.moveToNext();
         }
+        cursor.close();
         return result;
     }
 }

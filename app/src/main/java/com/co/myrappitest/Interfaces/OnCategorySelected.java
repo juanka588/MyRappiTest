@@ -7,5 +7,5 @@ import com.co.myrappitest.Data.DataT5;
  */
 
 public interface OnCategorySelected {
-    public void onCategorySelect(DataT5 object);
+     void onCategorySelect(DataT5 object);
 }
