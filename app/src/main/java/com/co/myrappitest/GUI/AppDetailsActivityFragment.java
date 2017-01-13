@@ -28,7 +28,7 @@ public class AppDetailsActivityFragment extends Fragment {
         TextView tx = (TextView) view.findViewById(R.id.title);
         tx.setText(cat.getTitle());
         TextView desc = (TextView) view.findViewById(R.id.description);
-        desc.setText(Html.fromHtml(cat.getDescription()));
+        desc.setText(Html.fromHtml(Html.fromHtml(cat.getHtmlDescription()).toString()));
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(cat.getTitle());
         return view;
     }
